@@ -1,3 +1,4 @@
+require('dotenv').config();// 
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -5,14 +6,17 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 
-// Enable CORS for specific origins (in this case, for localhost:5173)
+// Enable CORS for specific origins (e.g., your frontend origin)
 app.use(cors({
-  origin: 'http://localhost:5173', // Allow requests only from this origin
-  methods: ['GET', 'POST'], // Define the allowed methods
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST'],
 }));
 
-// Replace <password> with your actual password, URL-encoded (e.g., @ -> %40)
-mongoose.connect("mongodb+srv://Charzy123:Password%40123@charzy.xosj8.mongodb.net/myDatabase?retryWrites=true&w=majority")
+// Log MongoDB URI to check if it's being loaded correctly
+console.log("MongoDB URI:", process.env.MONGO_URI);
+
+// MongoDB connection using environment variable
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.error("MongoDB connection error:", err));
 
@@ -22,7 +26,7 @@ const rateSchema = new mongoose.Schema({
   code: String,
   buy: String,
   sell: String,
-  type: String // 'btc' or 'usdt'
+  type: String
 });
 
 const Rate = mongoose.model("Rate", rateSchema);
@@ -44,7 +48,7 @@ app.post("/api/rates/update", async (req, res) => {
     const updatedRate = await Rate.findOneAndUpdate(
       { country, type },
       { buy, sell },
-      { new: true, upsert: true } // Create the document if it doesn't exist
+      { new: true, upsert: true }
     );
     res.json(updatedRate);
   } catch (err) {
