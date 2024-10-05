@@ -1,4 +1,4 @@
-require('dotenv').config();// 
+require('dotenv').config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -6,9 +6,9 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 
-// Enable CORS for specific origins (e.g., your frontend origin)
+// Enable CORS for specific origins
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'https://leosexchange.netlify.app ', // Your actual frontend URL
   methods: ['GET', 'POST'],
 }));
 
@@ -19,6 +19,11 @@ console.log("MongoDB URI:", process.env.MONGO_URI);
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.error("MongoDB connection error:", err));
+
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
 
 // Schema for storing the rates
 const rateSchema = new mongoose.Schema({
@@ -56,6 +61,6 @@ app.post("/api/rates/update", async (req, res) => {
   }
 });
 
-// Start the server on port 5000
+// Start the server on Render.com
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
