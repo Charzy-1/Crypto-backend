@@ -8,8 +8,10 @@ app.use(express.json());
 
 // Enable CORS for specific origins
 app.use(cors({
-  origin: 'https://leosexchange.netlify.app', // Your actual frontend URL (removed extra space)
-  methods: ['GET', 'POST'],
+  origin: 'https://leosexchange.netlify.app ', // Your actual frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // If you are using credentials like cookies
 }));
 
 // Log MongoDB URI to check if it's being loaded correctly
@@ -52,8 +54,8 @@ app.post("/api/rates/update", async (req, res) => {
     const { country, code, buy, sell, type } = req.body;
     const updatedRate = await Rate.findOneAndUpdate(
       { country, type },
-      { buy, sell, code }, // Ensure code is also updated
-      { new: true, upsert: true } // Create new if not found
+      { buy, sell },
+      { new: true, upsert: true }
     );
     res.json(updatedRate);
   } catch (err) {
@@ -61,6 +63,6 @@ app.post("/api/rates/update", async (req, res) => {
   }
 });
 
-// Start the server
+// Start the server on Render.com
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
