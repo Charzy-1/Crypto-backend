@@ -6,13 +6,16 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 
-// Enable CORS for specific origins
+// Enable CORS for specific origins with fixed origin URL
 app.use(cors({
-  origin: 'https://leosexchange.netlify.app ', // Your actual frontend URL
+  origin: 'https://leosexchange.netlify.app', // Corrected the trailing space
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true // If you are using credentials like cookies
+  credentials: true // If you're using cookies or authorization headers
 }));
+
+// Handle preflight requests for all routes
+app.options('*', cors());
 
 // Log MongoDB URI to check if it's being loaded correctly
 console.log("MongoDB URI:", process.env.MONGO_URI);
