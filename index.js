@@ -57,10 +57,26 @@ app.post("/api/rates/update", async (req, res) => {
     const { country, code, buy, sell, type } = req.body;
     const updatedRate = await Rate.findOneAndUpdate(
       { country, type },
-      { buy, sell },
+      { buy, sell, code }, // Include 'code' in the update
       { new: true, upsert: true }
     );
     res.json(updatedRate);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Endpoint to delete rates
+app.delete("/api/rates/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedRate = await Rate.findByIdAndDelete(id);
+
+    if (!deletedRate) {
+      return res.status(404).json({ message: 'Rate not found' });
+    }
+    
+    res.json({ message: 'Rate deleted successfully' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
