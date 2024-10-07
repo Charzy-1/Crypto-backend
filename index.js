@@ -8,7 +8,7 @@ app.use(express.json());
 
 // Enable CORS for specific origins with fixed origin URL
 app.use(cors({
-  origin: 'https://leosexchange.netlify.app', // Corrected the trailing space
+  origin: 'https://leosexchange.com', // Corrected the trailing space
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true // If you're using cookies or authorization headers
