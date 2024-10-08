@@ -6,9 +6,9 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 
-// Enable CORS for specific origins with fixed origin URL
+// Enable CORS for specific origins with multiple origin URLs
 app.use(cors({
-  origin: 'https://leos-exchange.com', // Corrected the trailing space
+  origin: ['https://leos-exchange.com', 'https://leosexchange.com'], // Allow both domains
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true // If you're using cookies or authorization headers
